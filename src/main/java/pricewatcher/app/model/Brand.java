@@ -25,16 +25,16 @@ import java.time.LocalDate;
 @Setter
 public class Brand {
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
-	private long id;
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    private long id;
 
-	@Column(unique = true)
-	private String name;
+    @Column(unique = true)
+    private String name;
 
-	@CreatedDate
-	private LocalDate createdAt;
+    @CreatedDate
+    private LocalDate createdAt;
 
-	@LastModifiedDate
-	private LocalDate updatedAt;
+    @LastModifiedDate
+    private LocalDate updatedAt;
 }
