@@ -33,6 +33,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("net.datafaker:datafaker:2.0.1")
 	implementation("org.instancio:instancio-junit:3.3.0")
+	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
