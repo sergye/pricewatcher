@@ -9,5 +9,5 @@ import lombok.Setter;
 public class BrandCreateDTO {
 
     @NotBlank
-    private String firstName;
+    private String name;
 }

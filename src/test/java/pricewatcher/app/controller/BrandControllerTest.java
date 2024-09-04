@@ -10,7 +10,6 @@ import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,115 +24,111 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// BEGIN
 @SpringBootTest
 @AutoConfigureMockMvc
-// END
 class ApplicationTest {
 
-	private static final Faker FAKER = new Faker();
+    private static final Faker FAKER = new Faker();
 
-	@Autowired
-	private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-	@Autowired
-	private ModelGenerator modelGenerator;
+    @Autowired
+    private ModelGenerator modelGenerator;
 
-	@Autowired
-	private ObjectMapper om;
+    @Autowired
+    private ObjectMapper om;
 
-	@Autowired
-	private BrandRepository brandRepository;
+    @Autowired
+    private BrandRepository brandRepository;
 
-	private Brand brand;
+    private Brand brand;
 
-	@BeforeEach
-	public void setUp() {
-		brand = Instancio.of(modelGenerator.getBrandModel()).create();
-	}
-
-
-	@Test
-	public void testWelcomePage() throws Exception {
-		var result = mockMvc.perform(get("/welcome"))
-				.andExpect(status().isOk())
-				.andReturn();
-
-		var body = result.getResponse().getContentAsString();
-		assertThat(body).contains("Welcome to Spring!");
-	}
-
-	@Test
-	public void testIndex() throws Exception {
-		brandRepository.save(brand);
-		var result = mockMvc.perform(get("/brands"))
-				.andExpect(status().isOk())
-				.andReturn();
-
-		var body = result.getResponse().getContentAsString();
-		assertThatJson(body).isArray();
-	}
+    @BeforeEach
+    public void setUp() {
+        brand = Instancio.of(modelGenerator.getBrandModel()).create();
+    }
 
 
-	// BEGIN
-	@Test
-	public void testShow() throws Exception {
-		brandRepository.save(brand);
+    @Test
+    public void testWelcomePage() throws Exception {
+        var result = mockMvc.perform(get("/welcome"))
+                .andExpect(status().isOk())
+                .andReturn();
 
-		var result = mockMvc.perform(get("/brands/" + brand.getId()))
-				.andExpect(status().isOk())
-				.andReturn();
+        var body = result.getResponse().getContentAsString();
+        assertThat(body).contains("Welcome to Price Watcher!");
+    }
 
-		var body = result.getResponse().getContentAsString();
+    @Test
+    public void testIndex() throws Exception {
+        brandRepository.save(brand);
+        var result = mockMvc.perform(get("/brands"))
+                .andExpect(status().isOk())
+                .andReturn();
 
-		assertThatJson(body).and(
-				a -> a.node("name").isEqualTo(brand.getName()ame())
-		);
-	}
+        var body = result.getResponse().getContentAsString();
+        assertThatJson(body).isArray();
+    }
 
-	@Test
-	public void testCreate() throws Exception {
-		var brandData = Instancio.of(modelGenerator.getBrandModel()).create();
 
-		mockMvc.perform(post("/brands")
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(om.writeValueAsString(brandData)))
-				.andExpect(status().isCreated());
+    @Test
+    public void testShow() throws Exception {
+        brandRepository.save(brand);
 
-		var brand = brandRepository.findByName(brandData.getName())
-				.orElseThrow(() -> new ResourceNotFoundException("Brand not found"));
+        var result = mockMvc.perform(get("/brands/" + brand.getId()))
+                .andExpect(status().isOk())
+                .andReturn();
 
-		assertThat(brand.getName()).isEqualTo((brandData.getName()));
-	}
+        var body = result.getResponse().getContentAsString();
 
-	@Test
-	public void testUpdate() throws Exception {
-		brandRepository.save(brand);
+        assertThatJson(body).and(
+                a -> a.node("name").isEqualTo(brand.getName())
+        );
+    }
 
-		BrandUpdateDTO brandData = new BrandUpdateDTO();
-		brandData.setName(JsonNullable.of(FAKER.name().name()));
+    @Test
+    public void testCreate() throws Exception {
+        var brandData = Instancio.of(modelGenerator.getBrandModel()).create();
 
-		var request = put("/brands/" + brand.getId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(om.writeValueAsString(brandData));
+        mockMvc.perform(post("/brands")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsString(brandData)))
+                .andExpect(status().isCreated());
 
-		mockMvc.perform(request)
-				.andExpect(status().isOk());
+        var brand = brandRepository.findByName(brandData.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found"));
 
-		var updatedBrand = brandRepository.findById(brand.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("Brand not found"));
+        assertThat(brand.getName()).isEqualTo((brandData.getName()));
+    }
 
-		assertThat(updatedBrand.getName()).isEqualTo((brandData.getName().get()));
-	}
+    @Test
+    public void testUpdate() throws Exception {
+        brandRepository.save(brand);
 
-	@Test
-	public void testDelete() throws Exception {
-		brandRepository.save(brand);
+        BrandUpdateDTO brandData = new BrandUpdateDTO();
+        brandData.setName(FAKER.name().name());
 
-		mockMvc.perform(delete("/brands/" + brand.getId()))
-				.andExpect(status().isNoContent());
+        var request = put("/brands/" + brand.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(brandData));
 
-		assertThat(brandRepository.findById(brand.getId())).isEmpty();
-	}
-	// END
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        var updatedBrand = brandRepository.findById(brand.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found"));
+
+        assertThat(updatedBrand.getName()).isEqualTo((brandData.getName()));
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        brandRepository.save(brand);
+
+        mockMvc.perform(delete("/brands/" + brand.getId()))
+                .andExpect(status().isNoContent());
+
+        assertThat(brandRepository.findById(brand.getId())).isEmpty();
+    }
 }
