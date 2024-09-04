@@ -43,6 +43,7 @@ dependencies {
 
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
