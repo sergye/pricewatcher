@@ -9,5 +9,5 @@ import pricewatcher.app.model.Brand;
 
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long> {
-	Optional<Brand> findByEmail(String email);
+    Optional<Brand> findByEmail(String email);
 }
