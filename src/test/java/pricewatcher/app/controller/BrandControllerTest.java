@@ -1,11 +1,15 @@
 package pricewatcher.app.controller;
 
+import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import pricewatcher.app.component.DefaultBrandProperties;
 import pricewatcher.app.dto.BrandUpdateDTO;
 import pricewatcher.app.exception.ResourceNotFoundException;
 import pricewatcher.app.model.Brand;
 import pricewatcher.app.repository.BrandRepository;
 import pricewatcher.app.util.ModelGenerator;
+
 import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -41,6 +46,9 @@ class ApplicationTest {
 
     @Autowired
     private BrandRepository brandRepository;
+
+    @Autowired
+    private DefaultBrandProperties defaultBrandProperties;
 
     private Brand brand;
 
@@ -130,5 +138,16 @@ class ApplicationTest {
                 .andExpect(status().isNoContent());
 
         assertThat(brandRepository.findById(brand.getId())).isEmpty();
+    }
+
+    @Test
+    public void testCreateDefaultBrand() {
+        String name = defaultBrandProperties.getName();
+        Optional<Brand> brandOptional = brandRepository.findByName(name);
+
+        assertThat(brandOptional).isPresent();
+        Brand brand = brandOptional.get();
+
+        assertThat(brand.getName()).isEqualTo(defaultBrandProperties.getName());
     }
 }
