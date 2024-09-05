@@ -63,7 +63,7 @@ class ApplicationTest {
     @Test
     public void testIndex() throws Exception {
         brandRepository.save(brand);
-        var result = mockMvc.perform(get("/brands"))
+        var result = mockMvc.perform(get("/api/brands"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -76,7 +76,7 @@ class ApplicationTest {
     public void testShow() throws Exception {
         brandRepository.save(brand);
 
-        var result = mockMvc.perform(get("/brands/" + brand.getId()))
+        var result = mockMvc.perform(get("/api/brands/" + brand.getId()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -91,7 +91,7 @@ class ApplicationTest {
     public void testCreate() throws Exception {
         var brandData = Instancio.of(modelGenerator.getBrandModel()).create();
 
-        mockMvc.perform(post("/brands")
+        mockMvc.perform(post("/api/brands")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(om.writeValueAsString(brandData)))
                 .andExpect(status().isCreated());
@@ -109,7 +109,7 @@ class ApplicationTest {
         BrandUpdateDTO brandData = new BrandUpdateDTO();
         brandData.setName(FAKER.name().name());
 
-        var request = put("/brands/" + brand.getId())
+        var request = put("/api/brands/" + brand.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(brandData));
 
@@ -126,7 +126,7 @@ class ApplicationTest {
     public void testDelete() throws Exception {
         brandRepository.save(brand);
 
-        mockMvc.perform(delete("/brands/" + brand.getId()))
+        mockMvc.perform(delete("/api/brands/" + brand.getId()))
                 .andExpect(status().isNoContent());
 
         assertThat(brandRepository.findById(brand.getId())).isEmpty();
