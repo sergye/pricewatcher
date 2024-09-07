@@ -1,4 +1,4 @@
-package pricewatcher.app.dto;
+package pricewatcher.app.dto.brand;
 
 import lombok.Getter;
 import lombok.Setter;

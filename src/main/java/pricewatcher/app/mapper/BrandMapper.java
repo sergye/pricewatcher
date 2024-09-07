@@ -1,8 +1,8 @@
 package pricewatcher.app.mapper;
 
-import pricewatcher.app.dto.BrandCreateDTO;
-import pricewatcher.app.dto.BrandDTO;
-import pricewatcher.app.dto.BrandUpdateDTO;
+import pricewatcher.app.dto.brand.BrandCreateDTO;
+import pricewatcher.app.dto.brand.BrandDTO;
+import pricewatcher.app.dto.brand.BrandUpdateDTO;
 import pricewatcher.app.model.Brand;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

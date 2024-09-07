@@ -1,4 +1,4 @@
-package pricewatcher.app.dto;
+package pricewatcher.app.dto.brand;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

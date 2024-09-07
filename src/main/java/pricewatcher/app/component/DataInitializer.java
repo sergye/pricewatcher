@@ -1,6 +1,6 @@
 package pricewatcher.app.component;
 
-import pricewatcher.app.dto.BrandCreateDTO;
+import pricewatcher.app.dto.brand.BrandCreateDTO;
 import pricewatcher.app.mapper.BrandMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

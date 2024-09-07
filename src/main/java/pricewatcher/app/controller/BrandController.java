@@ -2,9 +2,9 @@ package pricewatcher.app.controller;
 
 import java.util.List;
 
-import pricewatcher.app.dto.BrandCreateDTO;
-import pricewatcher.app.dto.BrandDTO;
-import pricewatcher.app.dto.BrandUpdateDTO;
+import pricewatcher.app.dto.brand.BrandCreateDTO;
+import pricewatcher.app.dto.brand.BrandDTO;
+import pricewatcher.app.dto.brand.BrandUpdateDTO;
 import pricewatcher.app.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

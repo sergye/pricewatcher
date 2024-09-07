@@ -4,7 +4,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pricewatcher.app.component.DefaultBrandProperties;
-import pricewatcher.app.dto.BrandUpdateDTO;
+import pricewatcher.app.dto.brand.BrandUpdateDTO;
 import pricewatcher.app.exception.ResourceNotFoundException;
 import pricewatcher.app.model.Brand;
 import pricewatcher.app.repository.BrandRepository;
