@@ -1,4 +1,4 @@
-package pricewatcher.app.util;
+package pricewatcher.app.controller;
 
 import pricewatcher.app.model.Brand;
 import jakarta.annotation.PostConstruct;

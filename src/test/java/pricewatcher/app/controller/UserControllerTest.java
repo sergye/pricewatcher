@@ -6,7 +6,6 @@ import pricewatcher.app.dto.user.UserUpdateDTO;
 import pricewatcher.app.exception.ResourceNotFoundException;
 import pricewatcher.app.model.User;
 import pricewatcher.app.repository.UserRepository;
-import pricewatcher.app.util.ModelGenerator;
 import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;

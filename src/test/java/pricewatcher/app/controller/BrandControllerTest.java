@@ -7,7 +7,6 @@ import pricewatcher.app.exception.ResourceNotFoundException;
 import pricewatcher.app.model.Brand;
 import pricewatcher.app.model.User;
 import pricewatcher.app.repository.BrandRepository;
-import pricewatcher.app.util.ModelGenerator;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
