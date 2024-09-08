@@ -2,6 +2,7 @@ package pricewatcher.app.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import pricewatcher.app.dto.brand.BrandCreateDTO;
 import pricewatcher.app.dto.brand.BrandDTO;
 import pricewatcher.app.dto.brand.BrandUpdateDTO;
@@ -28,8 +29,12 @@ public class BrandController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public List<BrandDTO> index() {
-        return brandService.getAll();
+    ResponseEntity<List<BrandDTO>> index() {
+        List<BrandDTO> brands = brandService.getAll();
+
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(brands.size()))
+                .body(brands);
     }
 
     @GetMapping("/{id}")
