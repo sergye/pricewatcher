@@ -1,6 +1,7 @@
 package pricewatcher.app.service;
 
 import pricewatcher.app.dto.pricedate.PriceDateCreateDTO;
+import pricewatcher.app.dto.pricedate.PriceDateFormatDTO;
 import pricewatcher.app.dto.pricedate.PriceDateDTO;
 import pricewatcher.app.dto.pricedate.PriceDateUpdateDTO;
 import pricewatcher.app.exception.ResourceNotFoundException;
@@ -9,6 +10,8 @@ import pricewatcher.app.repository.PriceDateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -27,7 +30,11 @@ public class PriceDateService {
     }
 
     public PriceDateDTO create(PriceDateCreateDTO priceDateCreateDTO) {
-        var priceDate = priceDateMapper.map(priceDateCreateDTO);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        var formatedDate = LocalDate.parse(priceDateCreateDTO.getPriceDate(), formatter);
+        PriceDateFormatDTO priceDateFormatDTO = new PriceDateFormatDTO();
+        priceDateFormatDTO.setPriceDate(formatedDate);
+        var priceDate = priceDateMapper.map(priceDateFormatDTO);
         repository.save(priceDate);
         return priceDateMapper.map(priceDate);
     }
@@ -41,7 +48,11 @@ public class PriceDateService {
     public PriceDateDTO update(PriceDateUpdateDTO priceDateUpdateDTO, Long id) {
         var priceDate = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PriceDate not found: " + id));
-        priceDateMapper.update(priceDateUpdateDTO, priceDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        var formatedDate = LocalDate.parse(priceDateUpdateDTO.getPriceDate().get(), formatter);
+        PriceDateFormatDTO priceDateFormatDTO = new PriceDateFormatDTO();
+        priceDateFormatDTO.setPriceDate(formatedDate);
+        priceDateMapper.update(priceDateFormatDTO, priceDate);
         repository.save(priceDate);
         return priceDateMapper.map(priceDate);
     }

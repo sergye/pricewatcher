@@ -4,9 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
-public class PriceDateCreateDTO {
+public class PriceDateFormatDTO {
     @NotBlank
-    private String priceDate;
+    private LocalDate priceDate;
 }
