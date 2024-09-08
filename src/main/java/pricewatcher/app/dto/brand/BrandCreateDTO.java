@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class BrandCreateDTO {
-
     @NotBlank
     private String name;
 }

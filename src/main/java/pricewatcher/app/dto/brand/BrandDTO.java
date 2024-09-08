@@ -9,10 +9,6 @@ import java.time.LocalDate;
 @Getter
 public class BrandDTO {
     private Long id;
-
     private String name;
-
     private LocalDate createdAt;
-
-    private LocalDate updatedAt;
 }
