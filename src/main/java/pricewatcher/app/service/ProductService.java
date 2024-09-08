@@ -34,13 +34,13 @@ public class ProductService {
 
     public ProductDTO findById(Long id) {
         var product = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not Found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
         return productMapper.map(product);
     }
 
     public ProductDTO update(ProductUpdateDTO productUpdateDTO, Long id) {
         var product = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not Found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
         productMapper.update(productUpdateDTO, product);
         repository.save(product);
         return productMapper.map(product);

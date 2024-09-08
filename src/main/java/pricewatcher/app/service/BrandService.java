@@ -34,13 +34,13 @@ public class BrandService {
 
     public BrandDTO findById(Long id) {
         var brand = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not Found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found: " + id));
         return brandMapper.map(brand);
     }
 
     public BrandDTO update(BrandUpdateDTO brandUpdateDTO, Long id) {
         var brand = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not Found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found: " + id));
         brandMapper.update(brandUpdateDTO, brand);
         repository.save(brand);
         return brandMapper.map(brand);
