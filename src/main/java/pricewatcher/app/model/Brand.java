@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Getter;
@@ -34,7 +33,4 @@ public class Brand {
 
     @CreatedDate
     private LocalDate createdAt;
-
-    @LastModifiedDate
-    private LocalDate updatedAt;
 }
