@@ -22,6 +22,8 @@ public class PriceDateService {
     @Autowired
     private PriceDateMapper priceDateMapper;
 
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     public List<PriceDateDTO> getAll() {
         var priceDates = repository.findAll();
         return priceDates.stream()
@@ -30,8 +32,7 @@ public class PriceDateService {
     }
 
     public PriceDateDTO create(PriceDateCreateDTO priceDateCreateDTO) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        var formatedDate = LocalDate.parse(priceDateCreateDTO.getPriceDate(), formatter);
+        var formatedDate = LocalDate.parse(priceDateCreateDTO.getPriceDate(), FORMATTER);
         PriceDateFormatDTO priceDateFormatDTO = new PriceDateFormatDTO();
         priceDateFormatDTO.setPriceDate(formatedDate);
         var priceDate = priceDateMapper.map(priceDateFormatDTO);
@@ -48,8 +49,7 @@ public class PriceDateService {
     public PriceDateDTO update(PriceDateUpdateDTO priceDateUpdateDTO, Long id) {
         var priceDate = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PriceDate not found: " + id));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        var formatedDate = LocalDate.parse(priceDateUpdateDTO.getPriceDate().get(), formatter);
+        var formatedDate = LocalDate.parse(priceDateUpdateDTO.getPriceDate().get(), FORMATTER);
         PriceDateFormatDTO priceDateFormatDTO = new PriceDateFormatDTO();
         priceDateFormatDTO.setPriceDate(formatedDate);
         priceDateMapper.update(priceDateFormatDTO, priceDate);

@@ -1,23 +1,32 @@
 package pricewatcher.app.component;
 
 import pricewatcher.app.dto.brand.BrandCreateDTO;
+import pricewatcher.app.dto.pricedate.PriceDateCreateDTO;
+import pricewatcher.app.dto.pricedate.PriceDateFormatDTO;
 import pricewatcher.app.dto.product.ProductCreateDTO;
 import pricewatcher.app.dto.user.UserCreateDTO;
 import pricewatcher.app.mapper.BrandMapper;
+import pricewatcher.app.mapper.PriceDateMapper;
 import pricewatcher.app.mapper.ProductMapper;
 import pricewatcher.app.mapper.UserMapper;
+import pricewatcher.app.model.User;
+import pricewatcher.app.repository.BrandRepository;
+import pricewatcher.app.repository.PriceDateRepository;
+import pricewatcher.app.repository.ProductRepository;
+import pricewatcher.app.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import pricewatcher.app.model.User;
-import pricewatcher.app.repository.BrandRepository;
-import pricewatcher.app.repository.ProductRepository;
-import pricewatcher.app.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
+
+import java.time.LocalDate;
+
+import static pricewatcher.app.service.PriceDateService.FORMATTER;
 
 @Component
 @AllArgsConstructor
@@ -28,6 +37,13 @@ public class DataInitializer implements ApplicationRunner {
 
     @Autowired
     private BrandMapper brandMapper;
+
+    @Autowired
+    private PriceDateRepository priceDateRepository;
+
+    @Autowired
+    private PriceDateMapper priceDateMapper;
+
 
     @Autowired
     private ProductRepository productRepository;
@@ -99,6 +115,25 @@ public class DataInitializer implements ApplicationRunner {
 
             productRepository.save(productMapper.map(shirtProductDTO));
             productRepository.save(productMapper.map(hatProductDTO));
+        }
+    }
+
+    private void createDefaultPriceDates() {
+        if (priceDateRepository.findAll().isEmpty()) {
+            PriceDateCreateDTO date1CreateDTO = new PriceDateCreateDTO();
+            date1CreateDTO.setPriceDate("2020-06-14 10:00:00");
+            var formatedDate1 = LocalDate.parse(date1CreateDTO.getPriceDate(), FORMATTER);
+            PriceDateFormatDTO date1FormatDTO = new PriceDateFormatDTO();
+            date1FormatDTO.setPriceDate(formatedDate1);
+
+            PriceDateCreateDTO date2CreateDTO = new PriceDateCreateDTO();
+            date2CreateDTO.setPriceDate("2020-06-14 16:00:00");
+            var formatedDate2 = LocalDate.parse(date1CreateDTO.getPriceDate(), FORMATTER);
+            PriceDateFormatDTO date2FormatDTO = new PriceDateFormatDTO();
+            date2FormatDTO.setPriceDate(formatedDate2);
+
+            priceDateRepository.save(priceDateMapper.map(date1FormatDTO));
+            priceDateRepository.save(priceDateMapper.map(date2FormatDTO));
         }
     }
 }
