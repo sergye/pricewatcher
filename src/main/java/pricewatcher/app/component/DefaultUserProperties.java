@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 @Setter
-public class DefaultBrandProperties {
-    private String name = "Zara";
+public class DefaultUserProperties {
+    private String email = "admin@pricewatcher.com";
+    private String password = "admin";
 }
