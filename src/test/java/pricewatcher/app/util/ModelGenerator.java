@@ -8,6 +8,7 @@ import org.instancio.Instancio;
 import org.instancio.Model;
 import org.instancio.Select;
 import org.springframework.stereotype.Component;
+import pricewatcher.app.model.Product;
 import pricewatcher.app.model.User;
 
 @Getter
@@ -17,6 +18,7 @@ public class ModelGenerator {
 
     private Model<User> userModel;
     private Model<Brand> brandModel;
+    private Model<Product> productModel;
 
     @PostConstruct
     private void init() {
@@ -31,6 +33,11 @@ public class ModelGenerator {
         brandModel = Instancio.of(Brand.class)
                 .ignore(Select.field(Brand::getId))
                 .supply(Select.field(Brand::getName), () -> FAKER.name().name())
+                .toModel();
+
+        productModel = Instancio.of(Product.class)
+                .ignore(Select.field(Product::getId))
+                .supply(Select.field(Product::getName), () -> FAKER.name().name())
                 .toModel();
     }
 }

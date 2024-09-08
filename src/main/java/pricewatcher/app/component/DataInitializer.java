@@ -1,8 +1,10 @@
 package pricewatcher.app.component;
 
 import pricewatcher.app.dto.brand.BrandCreateDTO;
+import pricewatcher.app.dto.product.ProductCreateDTO;
 import pricewatcher.app.dto.user.UserCreateDTO;
 import pricewatcher.app.mapper.BrandMapper;
+import pricewatcher.app.mapper.ProductMapper;
 import pricewatcher.app.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import pricewatcher.app.model.User;
 import pricewatcher.app.repository.BrandRepository;
+import pricewatcher.app.repository.ProductRepository;
 import pricewatcher.app.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -25,6 +28,12 @@ public class DataInitializer implements ApplicationRunner {
 
     @Autowired
     private BrandMapper brandMapper;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductMapper productMapper;
 
     @Autowired
     private final UserRepository userRepository;
@@ -42,6 +51,7 @@ public class DataInitializer implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         createDefaultUser();
         createDefaultBrands();
+        createDefaultProducts();
     }
 
     private void createDefaultUser() {
@@ -76,6 +86,19 @@ public class DataInitializer implements ApplicationRunner {
 
             brandRepository.save(brandMapper.map(zaraBrandDTO));
             brandRepository.save(brandMapper.map(mangoBrandDTO));
+        }
+    }
+
+    private void createDefaultProducts() {
+        if (productRepository.findAll().isEmpty()) {
+            ProductCreateDTO shirtProductDTO = new ProductCreateDTO();
+            shirtProductDTO.setName("Shirt");
+
+            ProductCreateDTO hatProductDTO = new ProductCreateDTO();
+            hatProductDTO.setName("Hat");
+
+            productRepository.save(productMapper.map(shirtProductDTO));
+            productRepository.save(productMapper.map(hatProductDTO));
         }
     }
 }
