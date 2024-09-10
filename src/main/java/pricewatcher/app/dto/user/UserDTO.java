@@ -3,7 +3,7 @@ package pricewatcher.app.dto.user;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -16,5 +16,5 @@ public class UserDTO {
 
     private String lastName;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }

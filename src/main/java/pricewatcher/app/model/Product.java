@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -34,5 +34,5 @@ public class Product {
     private String name;
 
     @CreatedDate
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }

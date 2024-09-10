@@ -3,7 +3,6 @@ package pricewatcher.app.dto.pricedate;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -11,5 +10,5 @@ import java.time.LocalDateTime;
 public class PriceDateDTO {
     private Long id;
     private LocalDateTime priceDate;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }

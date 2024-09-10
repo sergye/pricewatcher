@@ -18,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -50,7 +50,7 @@ public class User implements BaseEntity, UserDetails {
 
     @CreatedDate
     @Column
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
