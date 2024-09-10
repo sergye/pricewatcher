@@ -44,11 +44,8 @@ public class ModelGenerator {
 
         priceDateModel = Instancio.of(PriceDate.class)
                 .ignore(Select.field(PriceDate::getId))
-                .supply(Select.field(PriceDate::getPriceDate), () -> FAKER.date()
-                        .between(java.sql.Timestamp.valueOf("2000-01-01 00:00:00"),
-                                java.sql.Timestamp.valueOf("2023-12-31 23:59:59"))
+                .supply(Select.field(PriceDate::getPriceDate), () -> FAKER.date().birthday()
                         .toLocalDateTime())
                 .toModel();
-
     }
 }

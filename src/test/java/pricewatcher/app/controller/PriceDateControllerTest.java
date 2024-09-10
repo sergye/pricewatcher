@@ -104,7 +104,7 @@ class PriceDateControllerTest {
 
         assertThatJson(body).and(
                 a -> a.node("id").isEqualTo(priceDate.getId()),
-                a -> a.node("priceDate").isEqualTo(priceDate.getPriceDate())
+                a -> a.node("priceDate").isEqualTo(priceDate.getPriceDate().format(FORMATTER))
         );
     }
 
@@ -119,6 +119,8 @@ class PriceDateControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated());
+
+        var pricedates = priceDateRepository.findAll();
 
         var priceDate = priceDateRepository.findByPriceDate(priceDateData.getPriceDate())
                 .orElseThrow(() -> new ResourceNotFoundException("PriceDate not found"));
