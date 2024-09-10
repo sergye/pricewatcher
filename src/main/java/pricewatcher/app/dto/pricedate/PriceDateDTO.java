@@ -4,11 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
 public class PriceDateDTO {
     private Long id;
-    private LocalDate priceDate;
+    private LocalDateTime priceDate;
     private LocalDate createdAt;
 }

@@ -2,7 +2,6 @@ package pricewatcher.app.component;
 
 import pricewatcher.app.dto.brand.BrandCreateDTO;
 import pricewatcher.app.dto.pricedate.PriceDateCreateDTO;
-import pricewatcher.app.dto.pricedate.PriceDateFormatDTO;
 import pricewatcher.app.dto.product.ProductCreateDTO;
 import pricewatcher.app.dto.user.UserCreateDTO;
 import pricewatcher.app.mapper.BrandMapper;
@@ -24,13 +23,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AllArgsConstructor;
 
-import java.time.LocalDate;
-
-import static pricewatcher.app.service.PriceDateService.FORMATTER;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 @AllArgsConstructor
 public class DataInitializer implements ApplicationRunner {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private BrandRepository brandRepository;
@@ -43,7 +42,6 @@ public class DataInitializer implements ApplicationRunner {
 
     @Autowired
     private PriceDateMapper priceDateMapper;
-
 
     @Autowired
     private ProductRepository productRepository;
@@ -68,6 +66,7 @@ public class DataInitializer implements ApplicationRunner {
         createDefaultUser();
         createDefaultBrands();
         createDefaultProducts();
+        createDefaultPriceDates();
     }
 
     private void createDefaultUser() {
@@ -121,19 +120,15 @@ public class DataInitializer implements ApplicationRunner {
     private void createDefaultPriceDates() {
         if (priceDateRepository.findAll().isEmpty()) {
             PriceDateCreateDTO date1CreateDTO = new PriceDateCreateDTO();
-            date1CreateDTO.setPriceDate("2020-06-14 10:00:00");
-            var formatedDate1 = LocalDate.parse(date1CreateDTO.getPriceDate(), FORMATTER);
-            PriceDateFormatDTO date1FormatDTO = new PriceDateFormatDTO();
-            date1FormatDTO.setPriceDate(formatedDate1);
+            var date1 = LocalDateTime.parse("2020-06-14 10:00:00", FORMATTER);
+            date1CreateDTO.setPriceDate(date1);
 
             PriceDateCreateDTO date2CreateDTO = new PriceDateCreateDTO();
-            date2CreateDTO.setPriceDate("2020-06-14 16:00:00");
-            var formatedDate2 = LocalDate.parse(date1CreateDTO.getPriceDate(), FORMATTER);
-            PriceDateFormatDTO date2FormatDTO = new PriceDateFormatDTO();
-            date2FormatDTO.setPriceDate(formatedDate2);
+            var date2 = LocalDateTime.parse("2020-06-14 16:00:00", FORMATTER);
+            date2CreateDTO.setPriceDate(date2);
 
-            priceDateRepository.save(priceDateMapper.map(date1FormatDTO));
-            priceDateRepository.save(priceDateMapper.map(date2FormatDTO));
+            priceDateRepository.save(priceDateMapper.map(date1CreateDTO));
+            priceDateRepository.save(priceDateMapper.map(date2CreateDTO));
         }
     }
 }

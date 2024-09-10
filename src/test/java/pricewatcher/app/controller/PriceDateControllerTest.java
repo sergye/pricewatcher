@@ -2,10 +2,10 @@ package pricewatcher.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pricewatcher.app.component.DefaultUserProperties;
-import pricewatcher.app.dto.product.ProductUpdateDTO;
+import pricewatcher.app.dto.pricedate.PriceDateUpdateDTO;
 import pricewatcher.app.exception.ResourceNotFoundException;
-import pricewatcher.app.model.Product;
-import pricewatcher.app.repository.ProductRepository;
+import pricewatcher.app.model.PriceDate;
+import pricewatcher.app.repository.PriceDateRepository;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import pricewatcher.app.util.ModelGenerator;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,13 +33,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static pricewatcher.app.service.PriceDateService.FORMATTER;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc
 
-class ProductControllerTest {
+class PriceDateControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
@@ -53,14 +54,14 @@ class ProductControllerTest {
     private ObjectMapper om;
 
     @Autowired
-    private ProductRepository productRepository;
+    private PriceDateRepository priceDateRepository;
 
     @Autowired
     private DefaultUserProperties defaultUserProperties;
 
     private JwtRequestPostProcessor token;
 
-    private Product product;
+    private PriceDate priceDate;
 
     @BeforeEach
     public void setUp() {
@@ -70,20 +71,21 @@ class ProductControllerTest {
                 .build();
 
         token = jwt().jwt(builder -> builder.subject(defaultUserProperties.getEmail()));
-        product = Instancio.of(modelGenerator.getProductModel()).create();
-        productRepository.save(product);
+        priceDate = Instancio.of(modelGenerator.getPriceDateModel()).create();
+        priceDateRepository.save(priceDate);
+
     }
 
     @Test
     public void testUnauthenticatedAccess() throws Exception {
-        mockMvc.perform(get("/api/brands"))
+        mockMvc.perform(get("/api/dates"))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andReturn();
     }
 
     @Test
     public void testIndex() throws Exception {
-        var result = mockMvc.perform(get("/api/brands").with(token))
+        var result = mockMvc.perform(get("/api/dates").with(token))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -94,68 +96,68 @@ class ProductControllerTest {
     @Test
     public void testShow() throws Exception {
 
-        var result = mockMvc.perform(get("/api/products/" + product.getId()).with(token))
+        var result = mockMvc.perform(get("/api/dates/" + priceDate.getId()).with(token))
                 .andExpect(status().isOk())
                 .andReturn();
 
         var body = result.getResponse().getContentAsString();
 
         assertThatJson(body).and(
-                a -> a.node("id").isEqualTo(product.getId()),
-                a -> a.node("name").isEqualTo(product.getName())
+                a -> a.node("id").isEqualTo(priceDate.getId()),
+                a -> a.node("priceDate").isEqualTo(priceDate.getPriceDate())
         );
     }
 
     @Test
     public void testCreate() throws Exception {
-        var productData = Instancio.of(modelGenerator.getProductModel()).create();
+        var priceDateData = Instancio.of(modelGenerator.getPriceDateModel()).create();
 
-        var request = post("/api/products")
+        var request = post("/api/dates")
                 .with(token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(productData));
+                .content(om.writeValueAsString(priceDateData));
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated());
 
-        var product = productRepository.findByName(productData.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        var priceDate = priceDateRepository.findByPriceDate(priceDateData.getPriceDate())
+                .orElseThrow(() -> new ResourceNotFoundException("PriceDate not found"));
 
-        assertThat(product.getName()).isEqualTo((productData.getName()));
+        assertThat(priceDate.getPriceDate()).isEqualTo((priceDateData.getPriceDate()));
     }
 
     @Test
     public void testUpdate() throws Exception {
 
-        ProductUpdateDTO productData = new ProductUpdateDTO();
-        productData.setName(JsonNullable.of("product-name"));
+        PriceDateUpdateDTO priceDateData = new PriceDateUpdateDTO();
+        var date = LocalDateTime.parse("2022-06-14 10:00:00", FORMATTER);
+        priceDateData.setPriceDate(JsonNullable.of(date));
 
-        var request = put("/api/products/" + product.getId())
+        var request = put("/api/dates/" + priceDate.getId())
                 .with(token)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(productData));
+                .content(om.writeValueAsString(priceDateData));
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
 
-        var updatedProduct = productRepository.findById(product.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        var updatedPriceDate = priceDateRepository.findById(priceDate.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("PriceDate not found"));
 
-        assertThat(updatedProduct.getName()).isEqualTo((productData.getName().get()));
+        assertThat(updatedPriceDate.getPriceDate()).isEqualTo((priceDateData.getPriceDate().get()));
     }
 
     @Test
     public void testDelete() throws Exception {
 
-        mockMvc.perform(delete("/api/products/" + product.getId()).with(token))
+        mockMvc.perform(delete("/api/dates/" + priceDate.getId()).with(token))
                 .andExpect(status().isNoContent());
 
-        assertThat(productRepository.findById(product.getId())).isEmpty();
+        assertThat(priceDateRepository.findById(priceDate.getId())).isEmpty();
     }
 
     @Test
-    public void testDefaultProducts() {
-        assertThat(productRepository.findByName("Shirt")).isPresent();
-        assertThat(productRepository.findByName("Hat")).isPresent();
+    public void testDefaultPriceDates() {
+        assertThat(priceDateRepository.findById(1L)).isPresent();
     }
 }

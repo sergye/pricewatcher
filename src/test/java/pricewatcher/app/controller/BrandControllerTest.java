@@ -5,7 +5,6 @@ import pricewatcher.app.component.DefaultUserProperties;
 import pricewatcher.app.dto.brand.BrandUpdateDTO;
 import pricewatcher.app.exception.ResourceNotFoundException;
 import pricewatcher.app.model.Brand;
-import pricewatcher.app.model.User;
 import pricewatcher.app.repository.BrandRepository;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +60,6 @@ class BrandControllerTest {
 
     private JwtRequestPostProcessor token;
 
-    private User user;
     private Brand brand;
 
     @BeforeEach

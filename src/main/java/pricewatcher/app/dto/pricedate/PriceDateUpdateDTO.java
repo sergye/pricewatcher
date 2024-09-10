@@ -4,8 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openapitools.jackson.nullable.JsonNullable;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class PriceDateUpdateDTO {
-    private JsonNullable<String> priceDate;
+    private JsonNullable<LocalDateTime> priceDate;
 }
