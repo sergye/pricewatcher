@@ -40,7 +40,9 @@ public class Price {
 
     private LocalDateTime endDate;
 
-    private int priceList;
+    @JoinColumn(name = "price_list_id")
+    @ManyToOne
+    private PriceList priceList;
 
     @JoinColumn(name = "product_id")
     @ManyToOne
