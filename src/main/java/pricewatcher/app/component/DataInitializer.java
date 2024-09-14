@@ -1,27 +1,27 @@
 package pricewatcher.app.component;
 
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import pricewatcher.app.dto.brand.BrandCreateDTO;
 import pricewatcher.app.dto.pricedate.PriceDateCreateDTO;
+import pricewatcher.app.dto.pricelist.PriceListCreateDTO;
 import pricewatcher.app.dto.product.ProductCreateDTO;
 import pricewatcher.app.dto.user.UserCreateDTO;
 import pricewatcher.app.mapper.BrandMapper;
 import pricewatcher.app.mapper.PriceDateMapper;
+import pricewatcher.app.mapper.PriceListMapper;
 import pricewatcher.app.mapper.ProductMapper;
 import pricewatcher.app.mapper.UserMapper;
 import pricewatcher.app.model.User;
 import pricewatcher.app.repository.BrandRepository;
 import pricewatcher.app.repository.PriceDateRepository;
+import pricewatcher.app.repository.PriceListRepository;
 import pricewatcher.app.repository.ProductRepository;
 import pricewatcher.app.repository.UserRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-
-import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,6 +42,12 @@ public class DataInitializer implements ApplicationRunner {
 
     @Autowired
     private PriceDateMapper priceDateMapper;
+
+    @Autowired
+    private PriceListRepository priceListRepository;
+
+    @Autowired
+    private PriceListMapper priceListMapper;
 
     @Autowired
     private ProductRepository productRepository;
@@ -67,6 +73,7 @@ public class DataInitializer implements ApplicationRunner {
         createDefaultBrands();
         createDefaultProducts();
         createDefaultPriceDates();
+        createDefaultPriceLists();
     }
 
     private void createDefaultUser() {
@@ -93,14 +100,14 @@ public class DataInitializer implements ApplicationRunner {
 
     private void createDefaultBrands() {
         if (brandRepository.findAll().isEmpty()) {
-            BrandCreateDTO zaraBrandDTO = new BrandCreateDTO();
-            zaraBrandDTO.setName("Zara");
+            BrandCreateDTO allYearBrandDTO = new BrandCreateDTO();
+            allYearBrandDTO.setName("Zara");
 
-            BrandCreateDTO mangoBrandDTO = new BrandCreateDTO();
-            mangoBrandDTO.setName("Mango");
+            BrandCreateDTO afternoonBrandDTO = new BrandCreateDTO();
+            afternoonBrandDTO.setName("Mango");
 
-            brandRepository.save(brandMapper.map(zaraBrandDTO));
-            brandRepository.save(brandMapper.map(mangoBrandDTO));
+            brandRepository.save(brandMapper.map(allYearBrandDTO));
+            brandRepository.save(brandMapper.map(afternoonBrandDTO));
         }
     }
 
@@ -129,6 +136,27 @@ public class DataInitializer implements ApplicationRunner {
 
             priceDateRepository.save(priceDateMapper.map(date1CreateDTO));
             priceDateRepository.save(priceDateMapper.map(date2CreateDTO));
+        }
+    }
+
+    private void createDefaultPriceLists() {
+        if (priceListRepository.findAll().isEmpty()) {
+            PriceListCreateDTO allYearPriceListDTO = new PriceListCreateDTO();
+            allYearPriceListDTO.setName("All-year");
+
+            PriceListCreateDTO afternoonPriceListDTO = new PriceListCreateDTO();
+            afternoonPriceListDTO.setName("Afternoon");
+
+            PriceListCreateDTO morningPriceListDTO = new PriceListCreateDTO();
+            morningPriceListDTO.setName("Morning");
+
+            PriceListCreateDTO eveningPriceListDTO = new PriceListCreateDTO();
+            eveningPriceListDTO.setName("Evening");
+
+            priceListRepository.save(priceListMapper.map(allYearPriceListDTO));
+            priceListRepository.save(priceListMapper.map(afternoonPriceListDTO));
+            priceListRepository.save(priceListMapper.map(morningPriceListDTO));
+            priceListRepository.save(priceListMapper.map(eveningPriceListDTO));
         }
     }
 }
