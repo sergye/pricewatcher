@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "price_lists")
+@Table(name = "pricelists")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
