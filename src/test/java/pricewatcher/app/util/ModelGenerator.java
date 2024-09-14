@@ -9,6 +9,7 @@ import org.instancio.Model;
 import org.instancio.Select;
 import org.springframework.stereotype.Component;
 import pricewatcher.app.model.PriceDate;
+import pricewatcher.app.model.PriceList;
 import pricewatcher.app.model.Product;
 import pricewatcher.app.model.User;
 
@@ -21,6 +22,7 @@ public class ModelGenerator {
     private Model<Brand> brandModel;
     private Model<Product> productModel;
     private Model<PriceDate> priceDateModel;
+    private Model<PriceList> priceListModel;
 
     @PostConstruct
     private void init() {
@@ -46,6 +48,11 @@ public class ModelGenerator {
                 .ignore(Select.field(PriceDate::getId))
                 .supply(Select.field(PriceDate::getPriceDate), () -> FAKER.date().birthday()
                         .toLocalDateTime())
+                .toModel();
+
+        priceListModel = Instancio.of(PriceList.class)
+                .ignore(Select.field(PriceList::getId))
+                .supply(Select.field(PriceList::getName), () -> FAKER.name().name())
                 .toModel();
     }
 }
