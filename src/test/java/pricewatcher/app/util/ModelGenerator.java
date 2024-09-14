@@ -8,10 +8,17 @@ import org.instancio.Instancio;
 import org.instancio.Model;
 import org.instancio.Select;
 import org.springframework.stereotype.Component;
+import pricewatcher.app.model.Price;
 import pricewatcher.app.model.PriceDate;
 import pricewatcher.app.model.PriceList;
 import pricewatcher.app.model.Product;
 import pricewatcher.app.model.User;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Currency;
+
+import static pricewatcher.app.service.PriceDateService.FORMATTER;
 
 @Getter
 @Component
@@ -23,6 +30,7 @@ public class ModelGenerator {
     private Model<Product> productModel;
     private Model<PriceDate> priceDateModel;
     private Model<PriceList> priceListModel;
+    private Model<Price> priceModel;
 
     @PostConstruct
     private void init() {
@@ -53,6 +61,20 @@ public class ModelGenerator {
         priceListModel = Instancio.of(PriceList.class)
                 .ignore(Select.field(PriceList::getId))
                 .supply(Select.field(PriceList::getName), () -> FAKER.name().name())
+                .toModel();
+
+        priceModel = Instancio.of(Price.class)
+                .ignore(Select.field(Price::getId))
+                .supply(Select.field(Price::getProduct), this::getProductModel)
+                .supply(Select.field(Price::getBrand), this::getBrandModel)
+                .supply(Select.field(Price::getPriceList), this::getProductModel)
+                .supply(Select.field(Price::getStartDate),
+                        () -> LocalDateTime.parse("2020-06-14 10:00:00", FORMATTER))
+                .supply(Select.field(Price::getEndDate),
+                        () -> LocalDateTime.parse("2020-12-31 23:59:59", FORMATTER))
+                .supply(Select.field(Price::getPrice), () -> BigDecimal.valueOf(130L))
+                .supply(Select.field(Price::getCurr), () -> Currency.getInstance("EUR"))
+                .supply(Select.field(Price::getPriority), () -> 1L)
                 .toModel();
     }
 }
