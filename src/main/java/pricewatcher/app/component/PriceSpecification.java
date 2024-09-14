@@ -1,11 +1,13 @@
 package pricewatcher.app.component;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Component;
 import pricewatcher.app.dto.price.PriceFilterDTO;
 import pricewatcher.app.model.Price;
 
 import java.time.LocalDateTime;
 
+@Component
 public class PriceSpecification {
     public Specification<Price> build(PriceFilterDTO params) {
         return withProduct(params.getProduct())
