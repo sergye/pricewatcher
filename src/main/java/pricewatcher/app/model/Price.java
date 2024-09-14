@@ -48,7 +48,7 @@ public class Price {
     @ManyToOne
     private Product product;
 
-    private int priority;
+    private Long priority;
 
     private BigDecimal price;
 
