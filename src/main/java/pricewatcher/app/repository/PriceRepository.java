@@ -7,9 +7,11 @@ import org.springframework.stereotype.Repository;
 import pricewatcher.app.model.Price;
 import pricewatcher.app.model.PriceList;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Repository
 public interface PriceRepository extends JpaRepository<Price, Long>, JpaSpecificationExecutor<Price> {
     Optional<Price> findByPriceList(PriceList priceList);
+    Optional<Price> findByPrice(BigDecimal price);
 }
