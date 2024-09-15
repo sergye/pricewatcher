@@ -1,5 +1,6 @@
 package pricewatcher.app.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import pricewatcher.app.model.Brand;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -13,6 +14,9 @@ import pricewatcher.app.model.PriceDate;
 import pricewatcher.app.model.PriceList;
 import pricewatcher.app.model.Product;
 import pricewatcher.app.model.User;
+import pricewatcher.app.repository.BrandRepository;
+import pricewatcher.app.repository.PriceListRepository;
+import pricewatcher.app.repository.ProductRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,6 +35,15 @@ public class ModelGenerator {
     private Model<PriceDate> priceDateModel;
     private Model<PriceList> priceListModel;
     private Model<Price> priceModel;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private BrandRepository brandRepository;
+
+    @Autowired
+    private PriceListRepository priceListRepository;
 
     @PostConstruct
     private void init() {
@@ -65,14 +78,11 @@ public class ModelGenerator {
 
         priceModel = Instancio.of(Price.class)
                 .ignore(Select.field(Price::getId))
-                .supply(Select.field(Price::getProduct), this::getProductModel)
-                .supply(Select.field(Price::getBrand), this::getBrandModel)
-                .supply(Select.field(Price::getPriceList), this::getProductModel)
                 .supply(Select.field(Price::getStartDate),
                         () -> LocalDateTime.parse("2020-06-18 10:00:00", FORMATTER))
                 .supply(Select.field(Price::getEndDate),
                         () -> LocalDateTime.parse("2020-06-18 23:59:59", FORMATTER))
-                .supply(Select.field(Price::getPrice), () -> BigDecimal.valueOf(130L))
+                .supply(Select.field(Price::getPrice), () -> BigDecimal.valueOf(130.85))
                 .supply(Select.field(Price::getCurr), () -> Currency.getInstance("EUR"))
                 .supply(Select.field(Price::getPriority), () -> 1L)
                 .toModel();
