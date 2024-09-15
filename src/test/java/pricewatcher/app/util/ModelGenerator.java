@@ -69,9 +69,9 @@ public class ModelGenerator {
                 .supply(Select.field(Price::getBrand), this::getBrandModel)
                 .supply(Select.field(Price::getPriceList), this::getProductModel)
                 .supply(Select.field(Price::getStartDate),
-                        () -> LocalDateTime.parse("2020-06-14 10:00:00", FORMATTER))
+                        () -> LocalDateTime.parse("2020-06-18 10:00:00", FORMATTER))
                 .supply(Select.field(Price::getEndDate),
-                        () -> LocalDateTime.parse("2020-12-31 23:59:59", FORMATTER))
+                        () -> LocalDateTime.parse("2020-06-18 23:59:59", FORMATTER))
                 .supply(Select.field(Price::getPrice), () -> BigDecimal.valueOf(130L))
                 .supply(Select.field(Price::getCurr), () -> Currency.getInstance("EUR"))
                 .supply(Select.field(Price::getPriority), () -> 1L)
