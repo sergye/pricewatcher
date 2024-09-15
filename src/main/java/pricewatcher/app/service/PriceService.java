@@ -59,6 +59,8 @@ public class PriceService {
             throw new InvalidInputDataException("Start date should be earlier than end date");
         }
 
+        var items = priceRepository.findAll();
+
         if (priceRepository.findByPriceList(priceMapper.map(priceCreateDTO)
                 .getPriceList())
                 .isPresent()) {
@@ -94,38 +96,39 @@ public class PriceService {
 
     private void setPriceData(Price price, PriceUpdateDTO priceUpdateDTO) {
         PriceCreateDTO priceCreateDTO = new PriceCreateDTO();
-        priceCreateDTO.setProduct(priceUpdateDTO.getProduct().get());
-        priceCreateDTO.setBrand(priceUpdateDTO.getBrand().get());
-        priceCreateDTO.setPriceList(priceUpdateDTO.getPriceList().get());
+
+        if (priceUpdateDTO.getProduct() != null) {
+            priceCreateDTO.setProduct(priceUpdateDTO.getProduct().get());
+        }
+
+        if (priceUpdateDTO.getBrand() != null) {
+            priceCreateDTO.setBrand(priceUpdateDTO.getBrand().get());
+        }
+
+        if (priceUpdateDTO.getPriceList() != null) {
+            priceCreateDTO.setPriceList(priceUpdateDTO.getPriceList().get());
+        }
+
         setPriceData(price, priceCreateDTO);
     }
 
     private void setPriceData(Price price, PriceCreateDTO priceCreateDTO) {
 
         if (priceCreateDTO.getProduct() != null) {
-            Product newProduct = null;
-            if (price.getProduct() != null) {
-                newProduct = productRepository.findByName(priceCreateDTO.getProduct())
+            Product newProduct = productRepository.findByName(priceCreateDTO.getProduct())
                         .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-            }
             price.setProduct(newProduct);
         }
 
         if (priceCreateDTO.getBrand() != null) {
-            Brand newBrand = null;
-            if (price.getBrand() != null) {
-                newBrand = brandRepository.findByName(priceCreateDTO.getBrand())
+            Brand newBrand = brandRepository.findByName(priceCreateDTO.getBrand())
                         .orElseThrow(() -> new ResourceNotFoundException("Brand not found"));
-            }
             price.setBrand(newBrand);
         }
 
         if (priceCreateDTO.getPriceList() != null) {
-            PriceList newPriceList = null;
-            if (price.getPriceList() != null) {
-                newPriceList = priceListRepository.findByName(priceCreateDTO.getPriceList())
+            PriceList newPriceList = priceListRepository.findByName(priceCreateDTO.getPriceList())
                         .orElseThrow(() -> new ResourceNotFoundException("PriceList not found"));
-            }
             price.setPriceList(newPriceList);
         }
     }

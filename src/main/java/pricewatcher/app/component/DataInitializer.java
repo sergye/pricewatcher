@@ -7,17 +7,21 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pricewatcher.app.dto.brand.BrandCreateDTO;
-import pricewatcher.app.dto.price.PriceCreateDTO;
 import pricewatcher.app.dto.pricedate.PriceDateCreateDTO;
 import pricewatcher.app.dto.pricelist.PriceListCreateDTO;
 import pricewatcher.app.dto.product.ProductCreateDTO;
 import pricewatcher.app.dto.user.UserCreateDTO;
+import pricewatcher.app.exception.ResourceNotFoundException;
 import pricewatcher.app.mapper.BrandMapper;
 import pricewatcher.app.mapper.PriceDateMapper;
 import pricewatcher.app.mapper.PriceListMapper;
 import pricewatcher.app.mapper.PriceMapper;
 import pricewatcher.app.mapper.ProductMapper;
 import pricewatcher.app.mapper.UserMapper;
+import pricewatcher.app.model.Brand;
+import pricewatcher.app.model.Price;
+import pricewatcher.app.model.PriceList;
+import pricewatcher.app.model.Product;
 import pricewatcher.app.model.User;
 import pricewatcher.app.repository.BrandRepository;
 import pricewatcher.app.repository.PriceDateRepository;
@@ -28,20 +32,26 @@ import pricewatcher.app.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Currency;
+import java.util.List;
+
+import static pricewatcher.app.service.PriceDateService.FORMATTER;
+
 
 @Component
 @AllArgsConstructor
 public class DataInitializer implements ApplicationRunner {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final Currency EUR = Currency.getInstance("EUR");
-    private static final String SHIRT = "Shirt";
-    private static final String ZARA = "Zara";
-    private static final String ALL_YEAR = "All-year";
-    private static final String AFTERNOON = "Afternoon";
-    private static final String MORNING = "Morning";
-    private static final String EVENING = "Evening";
+    public static final String SHIRT = "Shirt";
+    public static final String HAT = "Hat";
+    public static final String ZARA = "ZARA";
+    public static final String MANGO = "MANGO";
+    public static final String ALL_YEAR = "All-year";
+    public static final String AFTERNOON = "Afternoon";
+    public static final String MORNING = "Morning";
+    public static final String EVENING = "Evening";
+    public static final Currency EUR = Currency.getInstance("EUR");
+    public static final String PRICE_LIST_NOT_FOUND = "Price list not found";
+
 
     @Autowired
     private BrandRepository brandRepository;
@@ -94,6 +104,7 @@ public class DataInitializer implements ApplicationRunner {
         createDefaultPriceLists();
         createDefaultPrices();
     }
+    private List<Price> items;
 
     private void createDefaultUser() {
         if (userRepository.findAll().isEmpty()) {
@@ -123,7 +134,7 @@ public class DataInitializer implements ApplicationRunner {
             allYearBrandDTO.setName(ZARA);
 
             BrandCreateDTO afternoonBrandDTO = new BrandCreateDTO();
-            afternoonBrandDTO.setName("Mango");
+            afternoonBrandDTO.setName(MANGO);
 
             brandRepository.save(brandMapper.map(allYearBrandDTO));
             brandRepository.save(brandMapper.map(afternoonBrandDTO));
@@ -136,7 +147,7 @@ public class DataInitializer implements ApplicationRunner {
             shirtProductDTO.setName(SHIRT);
 
             ProductCreateDTO hatProductDTO = new ProductCreateDTO();
-            hatProductDTO.setName("Hat");
+            hatProductDTO.setName(HAT);
 
             productRepository.save(productMapper.map(shirtProductDTO));
             productRepository.save(productMapper.map(hatProductDTO));
@@ -181,50 +192,70 @@ public class DataInitializer implements ApplicationRunner {
 
     private void createDefaultPrices() {
         if (priceRepository.findAll().isEmpty()) {
-            PriceCreateDTO price1DTO = new PriceCreateDTO();
-            price1DTO.setProduct(SHIRT);
-            price1DTO.setBrand(ZARA);
-            price1DTO.setPriceList(ALL_YEAR);
-            price1DTO.setStartDate(LocalDateTime.parse("2020-06-14 10:00:00", FORMATTER));
-            price1DTO.setEndDate(LocalDateTime.parse("2020-12-31 23:59:59", FORMATTER));
-            price1DTO.setPrice(BigDecimal.valueOf(35.50));
-            price1DTO.setCurr(EUR);
-            price1DTO.setPriority(0L);
+            Product product = productRepository.findByName(SHIRT)
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-            PriceCreateDTO price2DTO = new PriceCreateDTO();
-            price2DTO.setProduct(SHIRT);
-            price2DTO.setBrand(ZARA);
-            price2DTO.setPriceList(AFTERNOON);
-            price2DTO.setStartDate(LocalDateTime.parse("2020-06-14 15:00:00", FORMATTER));
-            price2DTO.setEndDate(LocalDateTime.parse("2020-06-14 18:30:00", FORMATTER));
-            price2DTO.setPrice(BigDecimal.valueOf(25.45));
-            price2DTO.setCurr(EUR);
-            price2DTO.setPriority(1L);
+            Brand brand  = brandRepository.findByName(ZARA)
+                    .orElseThrow(() -> new ResourceNotFoundException("Brand not found"));
 
-            PriceCreateDTO price3DTO = new PriceCreateDTO();
-            price3DTO.setProduct(SHIRT);
-            price3DTO.setBrand(ZARA);
-            price3DTO.setPriceList(MORNING);
-            price3DTO.setStartDate(LocalDateTime.parse("2020-06-15 00:00:00", FORMATTER));
-            price3DTO.setEndDate(LocalDateTime.parse("2020-06-15 11:00:00", FORMATTER));
-            price3DTO.setPrice(BigDecimal.valueOf(30.50));
-            price3DTO.setCurr(EUR);
-            price3DTO.setPriority(1L);
+            PriceList priceList1  = priceListRepository.findByName(ALL_YEAR)
+                    .orElseThrow(() -> new ResourceNotFoundException(PRICE_LIST_NOT_FOUND));
 
-            PriceCreateDTO price4DTO = new PriceCreateDTO();
-            price4DTO.setProduct(SHIRT);
-            price4DTO.setBrand(ZARA);
-            price4DTO.setPriceList(EVENING);
-            price4DTO.setStartDate(LocalDateTime.parse("2020-06-15 16:00:00", FORMATTER));
-            price4DTO.setEndDate(LocalDateTime.parse("2020-12-31 23:59:59", FORMATTER));
-            price4DTO.setPrice(BigDecimal.valueOf(38.95));
-            price4DTO.setCurr(EUR);
-            price4DTO.setPriority(1L);
+            PriceList priceList2  = priceListRepository.findByName(AFTERNOON)
+                    .orElseThrow(() -> new ResourceNotFoundException(PRICE_LIST_NOT_FOUND));
 
-            priceRepository.save(priceMapper.map(price1DTO));
-            priceRepository.save(priceMapper.map(price2DTO));
-            priceRepository.save(priceMapper.map(price3DTO));
-            priceRepository.save(priceMapper.map(price4DTO));
+            PriceList priceList3  = priceListRepository.findByName(MORNING)
+                    .orElseThrow(() -> new ResourceNotFoundException(PRICE_LIST_NOT_FOUND));
+
+            PriceList priceList4  = priceListRepository.findByName(EVENING)
+                    .orElseThrow(() -> new ResourceNotFoundException(PRICE_LIST_NOT_FOUND));
+
+            Price price1 = new Price();
+            price1.setProduct(product);
+            price1.setBrand(brand);
+            price1.setPriceList(priceList1);
+            price1.setStartDate(LocalDateTime.parse("2020-06-14 10:00:00", FORMATTER));
+            price1.setEndDate(LocalDateTime.parse("2020-12-31 23:59:59", FORMATTER));
+            price1.setPrice(BigDecimal.valueOf(35.50));
+            price1.setCurr(EUR);
+            price1.setPriority(0L);
+
+            Price price2 = new Price();
+            price2.setProduct(product);
+            price2.setBrand(brand);
+            price2.setPriceList(priceList2);
+            price2.setStartDate(LocalDateTime.parse("2020-06-14 15:00:00", FORMATTER));
+            price2.setEndDate(LocalDateTime.parse("2020-06-14 18:30:00", FORMATTER));
+            price2.setPrice(BigDecimal.valueOf(25.45));
+            price2.setCurr(EUR);
+            price2.setPriority(1L);
+
+            Price price3 = new Price();
+            price3.setProduct(product);
+            price3.setBrand(brand);
+            price3.setPriceList(priceList3);
+            price3.setStartDate(LocalDateTime.parse("2020-06-15 00:00:00", FORMATTER));
+            price3.setEndDate(LocalDateTime.parse("2020-06-15 11:00:00", FORMATTER));
+            price3.setPrice(BigDecimal.valueOf(30.50));
+            price3.setCurr(EUR);
+            price3.setPriority(1L);
+
+            Price price4 = new Price();
+            price4.setProduct(product);
+            price4.setBrand(brand);
+            price4.setPriceList(priceList4);
+            price4.setStartDate(LocalDateTime.parse("2020-06-15 16:00:00", FORMATTER));
+            price4.setEndDate(LocalDateTime.parse("2020-12-31 23:59:59", FORMATTER));
+            price4.setPrice(BigDecimal.valueOf(38.95));
+            price4.setCurr(EUR);
+            price4.setPriority(1L);
+
+            priceRepository.save(price1);
+            priceRepository.save(price2);
+            priceRepository.save(price3);
+            priceRepository.save(price4);
+
+            items = priceRepository.findAll();
         }
     }
 }

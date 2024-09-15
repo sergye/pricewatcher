@@ -7,8 +7,12 @@ import pricewatcher.app.model.Price;
 
 import java.time.LocalDateTime;
 
+import static pricewatcher.app.service.PriceDateService.FORMATTER;
+
 @Component
 public class PriceSpecification {
+    private LocalDateTime filterDate;
+
     public Specification<Price> build(PriceFilterDTO params) {
         return withProduct(params.getProduct())
                 .and(withBrand(params.getBrand()))
@@ -20,25 +24,26 @@ public class PriceSpecification {
     private Specification<Price> withProduct(String product) {
         return (root, query, cb) -> product == null
                 ? cb.conjunction()
-                : cb.like(cb.lower(root.get("product")), "%" + product + "%");
+                : cb.equal(root.get("product").get("name"), product);
 
     }
 
     private Specification<Price> withBrand(String brand) {
         return (root, query, cb) -> brand == null
                 ? cb.conjunction()
-                : cb.like(cb.lower(root.get("brand")), "%" + brand + "%");
+                : cb.equal(root.get("brand").get("name"), brand);
     }
 
     private Specification<Price> withPriceList(String priceList) {
         return (root, query, cb) -> priceList == null
                 ? cb.conjunction()
-                : cb.like(cb.lower(root.get("priceList")), "%" + priceList + "%");
+                : cb.equal(root.get("priceList").get("name"), priceList);
     }
 
-    private Specification<Price> withPriceDate(LocalDateTime priceDate) {
-        return (root, query, cb) -> priceDate == null
+    private Specification<Price> withPriceDate(String priceDate) {
+        filterDate = priceDate == null ? null : LocalDateTime.parse(priceDate, FORMATTER);
+        return (root, query, cb) -> filterDate == null
                 ? cb.conjunction()
-                : cb.between(cb.literal(priceDate), root.get("startDate"), root.get("endDate"));
+                : cb.between(cb.literal(filterDate), root.get("startDate"), root.get("endDate"));
     }
 }
