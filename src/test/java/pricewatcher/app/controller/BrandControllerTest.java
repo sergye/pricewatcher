@@ -32,7 +32,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static pricewatcher.app.component.DataInitializer.MANGO;
+import static pricewatcher.app.component.DataInitializer.ZARA;
 
 
 @SpringBootTest
@@ -155,7 +156,7 @@ class BrandControllerTest {
 
     @Test
     public void testDefaultBrands() {
-        assertThat(brandRepository.findByName("ZARA")).isPresent();
-        assertThat(brandRepository.findByName("MANGO")).isPresent();
+        assertThat(brandRepository.findByName(ZARA)).isPresent();
+        assertThat(brandRepository.findByName(MANGO)).isPresent();
     }
 }
