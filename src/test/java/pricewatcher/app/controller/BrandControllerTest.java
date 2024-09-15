@@ -155,7 +155,7 @@ class BrandControllerTest {
 
     @Test
     public void testDefaultBrands() {
-        assertThat(brandRepository.findByName("Zara")).isPresent();
-        assertThat(brandRepository.findByName("Mango")).isPresent();
+        assertThat(brandRepository.findByName("ZARA")).isPresent();
+        assertThat(brandRepository.findByName("MANGO")).isPresent();
     }
 }
