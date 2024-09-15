@@ -20,18 +20,9 @@ public class PriceCreateDTO {
     @NotBlank
     private String priceList;
 
-    @NotBlank
     private LocalDateTime startDate;
-
-    @NotBlank
     private LocalDateTime endDate;
-
-    @NotBlank
     private BigDecimal price;
-
-    @NotBlank
     private Currency curr;
-
-    @NotBlank
     private Long priority;
 }
