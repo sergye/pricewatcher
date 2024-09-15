@@ -5,6 +5,7 @@ import pricewatcher.app.dto.price.PriceCreateDTO;
 import pricewatcher.app.dto.price.PriceDTO;
 import pricewatcher.app.dto.price.PriceFilterDTO;
 import pricewatcher.app.dto.price.PriceUpdateDTO;
+import pricewatcher.app.exception.InvalidInputDataException;
 import pricewatcher.app.exception.ResourceAlreadyExistsException;
 import pricewatcher.app.exception.ResourceNotFoundException;
 import pricewatcher.app.mapper.PriceMapper;
@@ -51,6 +52,13 @@ public class PriceService {
     }
 
     public PriceDTO create(PriceCreateDTO priceCreateDTO) {
+        var startDate = priceCreateDTO.getStartDate();
+        var endDate = priceCreateDTO.getEndDate();
+
+        if (startDate.isAfter(endDate)) {
+            throw new InvalidInputDataException("Start date should be earlier than end date");
+        }
+
         if (priceRepository.findByPriceList(priceMapper.map(priceCreateDTO)
                 .getPriceList())
                 .isPresent()) {
