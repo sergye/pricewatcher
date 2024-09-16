@@ -10,6 +10,7 @@ import java.util.Currency;
 @Setter
 @Getter
 public class PriceDTO {
+    private Long id;
     private String product;
     private String brand;
     private String priceList;
@@ -18,4 +19,5 @@ public class PriceDTO {
     private BigDecimal price;
     private Currency curr;
     private Long priority;
+    private LocalDateTime createdAt;
 }
