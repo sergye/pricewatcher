@@ -17,6 +17,7 @@ It allows you to watch, filter, create, update and delete prices for different c
 ### Guidelines to use application by browser
 <ol>
 <li>Open in any browser the following link: https://pricewatcher-gw1u.onrender.com </li>
+<li>The application on Render hosting can be idle if it is not used for long time. Please wait for several minutes until it loads.</li>
 <li>Enter credentials listed above</li>
 <li>Move to navigation menu on the left</li>
 <li>Check price lists, dates, brands, products and prices preloaded for you </li>
@@ -55,11 +56,12 @@ It allows you to watch, filter, create, update and delete prices for different c
 <li>JWT</li>
 </ul>
 
-### Some important points:
+### Some important notes:
 <ul>
 <li>Use the following datetime format in your requests: "yyyy-MM-dd HH:mm:ss"</li>
 <li>Check how the main table "Prices" is tested in PriceControllerTest.java file</li>
 <li>Find the tests methods testFilter1()...testFilter5() to test main application endpoint "/api/prices"</li>
+<li>The application on Render hosting can be idle if it is not used for long time. Please wait for several minutes until it loads.</li>
 <li>Please contact me if you find bugs or have any questions: sergye@gmail.com</li>
 </ul>
 
