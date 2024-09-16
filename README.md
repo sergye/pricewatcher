@@ -54,3 +54,12 @@ It allows you to watch, filter, create, update and delete prices for different c
 <li>Mapstruct mappers</li>
 <li>JWT</li>
 </ul>
+
+### Some important points:
+<ul>
+<li>Use the following datetime format in your requests: "yyyy-MM-dd HH:mm:ss"</li>
+<li>Check how the main table "Prices" is tested in PriceControllerTest.java file</li>
+<li>Find the tests methods testFilter1()...testFilter5() to test main application endpoint "/api/prices"</li>
+<li>Please contact me if you find bugs or have any questions: sergye@gmail.com</li>
+</ul>
+
