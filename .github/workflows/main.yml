@@ -20,6 +20,17 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
           JACOCO_SOURCE_PATH: src/main/java
+          PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+          PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
+        run: |
+          # Create directory for certs if not exists
+          mkdir -p certs
+
+          # Save private key to certs/private.pem
+          echo "$PRIVATE_KEY" > certs/private.pem
+
+          # Save public key to certs/public.pem
+          echo "$PUBLIC_KEY" > certs/public.pem
         with:
           coverageCommand: make report
           coverageLocations: ${{github.workspace}}/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
