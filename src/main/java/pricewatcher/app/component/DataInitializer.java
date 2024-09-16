@@ -164,8 +164,23 @@ public class DataInitializer implements ApplicationRunner {
             var date2 = LocalDateTime.parse("2020-06-14 16:00:00", FORMATTER);
             date2CreateDTO.setPriceDate(date2);
 
+            PriceDateCreateDTO date3CreateDTO = new PriceDateCreateDTO();
+            var date3 = LocalDateTime.parse("2020-06-14 21:00:00", FORMATTER);
+            date3CreateDTO.setPriceDate(date3);
+
+            PriceDateCreateDTO date4CreateDTO = new PriceDateCreateDTO();
+            var date4 = LocalDateTime.parse("2020-06-15 10:00:00", FORMATTER);
+            date4CreateDTO.setPriceDate(date4);
+
+            PriceDateCreateDTO date5CreateDTO = new PriceDateCreateDTO();
+            var date5 = LocalDateTime.parse("2020-06-16 21:00:00", FORMATTER);
+            date5CreateDTO.setPriceDate(date5);
+
             priceDateRepository.save(priceDateMapper.map(date1CreateDTO));
             priceDateRepository.save(priceDateMapper.map(date2CreateDTO));
+            priceDateRepository.save(priceDateMapper.map(date3CreateDTO));
+            priceDateRepository.save(priceDateMapper.map(date4CreateDTO));
+            priceDateRepository.save(priceDateMapper.map(date5CreateDTO));
         }
     }
 
