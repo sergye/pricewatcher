@@ -9,17 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-      - uses: paambaati/codeclimate-action@v5.0.0
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up private and public keys
         env:
-          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-          JACOCO_SOURCE_PATH: src/main/java
           PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
           PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
         run: |
@@ -31,6 +25,24 @@ jobs:
 
           # Save public key to certs/public.pem
           echo "$PUBLIC_KEY" > certs/public.pem
+          
+          # Optionally, set permissions (chmod) for the private key file
+          chmod 600 certs/private.pem
+
+      - name: Setup Java
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Setup codeclimate settings
+      - uses: paambaati/codeclimate-action@v5.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+          JACOCO_SOURCE_PATH: src/main/java
         with:
           coverageCommand: make report
           coverageLocations: ${{github.workspace}}/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
