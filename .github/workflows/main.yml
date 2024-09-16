@@ -30,7 +30,7 @@ jobs:
           chmod 600 certs/private.pem
 
       - name: Setup Java
-      - uses: actions/setup-java@v4
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -39,7 +39,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Setup codeclimate settings
-      - uses: paambaati/codeclimate-action@v5.0.0
+        uses: paambaati/codeclimate-action@v5.0.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
           JACOCO_SOURCE_PATH: src/main/java
