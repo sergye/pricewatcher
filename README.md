@@ -17,7 +17,7 @@ It allows you to watch, filter, create, update and delete prices for different c
 ### Guidelines to use application by browser
 <ol>
 <li>Open in any browser the following link: https://pricewatcher-gw1u.onrender.com </li>
-<li>The application on Render hosting can be idle if it is not used for long time. Please wait for several minutes until it loads.</li>
+<li>The application on Render hosting can be idle if it is not used for a long time. Please wait for several minutes until it loads.</li>
 <li>Enter credentials listed above</li>
 <li>Move to navigation menu on the left</li>
 <li>Check price lists, dates, brands, products and prices preloaded for you </li>
